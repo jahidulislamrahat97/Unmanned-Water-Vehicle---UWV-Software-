@@ -3,10 +3,27 @@ import random
 import folium
 import time
 import threading
+from mqtt_client import MqttClient
+import json
+
+
+mqtt = MqttClient(id="1234")
+mqtt.getMqttBroker("broker.hivemq.com")
+mqtt.getMqttPort(1883)
+mqtt.getMqttSubTopic("UWV/Vehicle")
+mqtt.getMqttPubTopic("UWV/Vehicle")
 
 
 app = Flask(__name__)
-
+sensor_data = {
+        'compass_heading': random.randint(0,360),
+        'gps_heading': random.randint(0, 255),
+        'bot_speed': random.randint(1, 25),
+        'gps_speed': random.randint(1, 25),
+        'rudder_angle': random.randint(0, 30),
+        'satellite': random.randint(1, 25),
+        'valid': random.randint(0, 1)
+    }
 
 
 # GPS Speed, Bot Seed, Rudder angle, Comass heading, GPS Heading, satellite , valid
@@ -17,15 +34,16 @@ def home():
 
 @app.route('/get_sensor_value/<sensor>', methods=['GET'])
 def get_sensor_value(sensor):
-    sensor_data = {
-        'compass_heading': random.randint(0,360),
-        'gps_heading': random.randint(0, 255),
-        'bot_speed': random.randint(1, 25),
-        'gps_speed': random.randint(1, 25),
-        'rudder_angle': random.randint(0, 30),
-        'satellite': random.randint(1, 25),
-        'valid': random.randint(0, 1)
-    }
+    # sensor_data = {
+    #     'compass_heading': random.randint(0,360),
+    #     'gps_heading': random.randint(0, 255),
+    #     'bot_speed': random.randint(1, 25),
+    #     'gps_speed': random.randint(1, 25),
+    #     'rudder_angle': random.randint(0, 30),
+    #     'satellite': random.randint(1, 25),
+    #     'valid': random.randint(0, 1)
+    # }
+    global sensor_data
     # print(jsonify({sensor: sensor_data[sensor]}))
     return jsonify({sensor: sensor_data[sensor]})
 
@@ -65,9 +83,19 @@ map.add_child(folium.LatLngPopup().add_to(map))
 # Display the map
 map.save("static/map.html")
 
+def onMqttMessage(msg):
+    global sensor_data
+    try:
+        sensor_data = json.loads(msg.payload.decode('utf-8'))
+        print(sensor_data)
+    except:
+        print("Error in JSON Format")
 
 
 if __name__ == '__main__':
+    mqtt.setOnMessageCallbackFunction(onMqttMessage)
+    mqtt.connect()
+    mqtt.client.loop_start()
     app.run(debug=True)
 
 
