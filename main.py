@@ -52,6 +52,7 @@ def get_sensor_value(sensor):
 def button_press():
     button = request.form['button']
     print('Button pressed:', button)
+    mqtt.publish(topic="UWV/Vehicle/1234", payload=button)
     return 'Button pressed: ' + button
 
 
