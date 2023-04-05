@@ -1,0 +1,237 @@
+@import url(https://fonts.googleapis.com/css?family=Open+Sans:300,400,700);
+@import url(https://cdnjs.cloudflare.com/ajax/libs/weather-icons/1.2/css/weather-icons.min.css);
+
+body {
+	margin: 0;
+	padding: 0;
+	height: 100vh;
+	/* width: auto; */
+	/* overflow: hidden; */
+	/* position: fixed; */
+}
+
+.navbar {
+	height: 6vh;
+	background-color: #333;
+	color: white;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+}
+
+.navbar ul {
+	list-style-type: none;
+	margin: 0;
+	padding: 0;
+}
+
+.navbar li {
+	float: left;
+}
+
+.navbar li a {
+	display: block;
+	color: white;
+	text-align: center;
+	padding: 14px 16px;
+	text-decoration: none;
+}
+
+.navbar li a:hover {
+	background-color: #111;
+}
+
+.content-wrapper {
+	display: flex;
+	flex-direction: row;
+	height: 100vh;
+}
+
+.left-content {
+	background-color: rgb(41, 41, 41);
+	;
+	width: 70%;
+	box-sizing: border-box;
+}
+
+.right-content {
+	background-color: rgb(41, 41, 41);
+	;
+	width: 30%;
+	padding: 5px;
+	box-sizing: border-box;
+}
+
+.gamepad div {
+	display: flex;
+	justify-content: center;
+}
+
+.gamepad div .btn {
+	width: 15%;
+}
+
+@media only screen and (min-width: 768px) {
+	.gamepad div img {
+		width: 100%;
+	}
+}
+
+
+/* sensor data */
+.sensor-data-box {
+	margin-top: 10px;
+	height: auto;
+	/* margin: auto; */
+	display: grid;
+	grid-template-columns: 1fr 1fr;
+	grid-template-rows: 1fr 1fr 1fr;
+}
+
+.cell {
+	margin: 4px;
+	text-align: center;
+	padding: .8rem;
+}
+
+.cell-1 {
+	background: deepskyblue;
+}
+
+.cell-2 {
+	background: #FF8C00;
+}
+
+.cell-3 {
+	background: royalblue;
+}
+
+.cell-4 {
+	background: gold;
+}
+
+.cell-5 {
+	background: blueviolet;
+}
+
+.cell-6 {
+	background: limegreen;
+}
+
+.cell-7 {
+	background: coral;
+}
+
+.cell-8 {
+	background: lightseagreen;
+}
+
+.cell-9 {
+	background: maroon;
+}
+
+.temp {
+	font-size: 20px;
+	font-weight: 650;
+	text-align: center;
+	display: block;
+	color: rgb(255, 255, 255);
+
+}
+
+.param {
+	color: rgb(255, 255, 255);
+	text-align: center;
+	text-transform: uppercase;
+	/* font-weight: 350;
+	font-size: 30px; */
+	font-weight: 650;
+	font-size: 20px;
+	display: block;
+}
+
+
+/* button  */
+.sp-switch-box {
+	margin-top: 10px;
+	height: auto;
+	display: grid;
+	grid-template-columns: 1fr 1fr;
+	grid-template-rows: 1fr;
+}
+
+.switch {
+	position: relative;
+	display: inline-block;
+	width: 120px;
+	height: 42px;
+}
+
+.switch input {
+	opacity: 0;
+	width: 0;
+	height: 0;
+}
+
+.slider {
+	position: absolute;
+	cursor: pointer;
+	top: 0;
+	left: 0;
+	right: 0;
+	bottom: 0;
+	background-color: #ccc;
+	-webkit-transition: .4s;
+	transition: .4s;
+}
+
+.slider:before {
+	position: absolute;
+	content: "";
+	height: 35px;
+	width: 35px;
+	left: 6px;
+	bottom: 4px;
+	background-color: white;
+	-webkit-transition: .4s;
+	transition: .4s;
+}
+
+input:checked+.slider {
+	background-color: #2196F3;
+}
+
+input:focus+.slider {
+	box-shadow: 0 0 1px #2196F3;
+}
+
+input:checked+.slider:before {
+	transform: translateX(73px);
+}
+
+/* Rounded sliders */
+.slider.round {
+	border-radius: 60px;
+}
+
+.slider.round:before {
+	border-radius: 80%;
+}
+
+.s-cell-1 {
+	background: orangered;
+}
+
+.s-cell-2 {
+	background: #008080;
+}
+
+.s-param {
+	padding-top: 2px;
+	color: rgb(255, 255, 255);
+	text-align: center;
+	text-transform: uppercase;
+	font-weight: 650;
+	font-size: 15px;
+	display: block;
+}

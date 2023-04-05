@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<meta charset="utf-8">
+	<title>UWV</title>
+	<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='style.css') }}">
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+</head>
+
+<body>
+	<div class="navbar">
+		<nav>
+			<h1>Unmanned Water Vehicle</h1>
+		</nav>
+	</div>
+
+	<div class="content-wrapper">
+		<div class="left-content">
+			<iframe src="{{ url_for('static', filename='map.html') }}" frameborder="0" height="100%"
+				width="100%"></iframe>
+		</div>
+		<div class="right-content">
+			<div class="gamepad">
+				<div>
+					<button class="btn" id="forward"><img src="{{ url_for('static', filename='image/F.png') }}"
+							alt="F"></button>
+				</div>
+				<div>
+					<button class="btn" id="left"><img src="{{ url_for('static', filename='image/L.png') }}"
+							alt="L"></button>
+					<button class="btn" id="stop"><img src="{{ url_for('static', filename='image/S.png') }}"
+							alt="S"></button>
+					<button class="btn" id="right"><img src="{{ url_for('static', filename='image/R.png') }}"
+							alt="R"></button>
+				</div>
+				<!-- <div>
+					<button class="btn" id="backward"><img src="{{ url_for('static', filename='image/B.png') }}"
+							alt="B"></button>
+				</div> -->
+			</div>
+
+			<div>
+				<div class="sp-switch-box">
+					<div class="cell s-cell-1">
+						<label class="switch">
+							<input type="checkbox" name="kill-switch" , value="" , id="killswitch">
+							<span class="slider round"></span>
+						</label>
+						<span class="s-param">Kill Switch</span>
+					</div>
+					<div class="cell s-cell-2">
+						<label class="switch">
+							<input type="checkbox" name="auto-flight-switch" , value="" , id="auto-flight-switch">
+							<span class="slider round"></span>
+						</label>
+						<span class="s-param">autoflight mode</span>
+					</div>
+				</div>
+
+			</div>
+
+			<div>
+				<div class="sensor-data-box">
+					<div class="cell cell-1">
+						<span class="temp" id="compass_heading">23 &deg;</span>
+						<span class="param">Compass heading</span>
+					</div>
+					<div class="cell cell-2">
+						<span class="temp" id="gps_heading">255</span>
+						<span class="param">gps heading</span>
+					</div>
+					<div class="cell cell-3">
+						<span class="temp" id="bot_speed">105</span>
+						<span class="param">UWV speed</span>
+					</div>
+					<div class="cell cell-4">
+						<span class="temp" id="gps_speed">110</span>
+						<span class="param">gps speed</span>
+					</div>
+					<div class="cell cell-5">
+						<span class="temp" id="rudder_angle">23&deg;</span>
+						<span class="param">rudder angle</span>
+					</div>
+					<div class="cell cell-6">
+						<span class="temp" id="satellite">20</span>
+						<span class="param">satellite</span>
+					</div>
+					<div class="cell cell-7">
+						<span class="temp" id="vaid">1</span>
+						<span class="param">vaid</span>
+					</div>
+				</div>
+			</div>
+
+</body>
+<script>
+	$(document).ready(function () {
+		// Send button data to backend via AJAX
+		$('.btn').click(function () {
+			$.ajax({
+				url: '{{ url_for("button_press") }}',
+				type: 'POST',
+				data: { button: $(this).attr('id') },
+				success: function (response) {
+					console.log(response);
+				},
+				error: function (error) {
+					console.log(error);
+				}
+			});
+		});
+
+		$('#killswitch').click(function () {
+			var chk = $(this).is(":checked");
+			console.log(chk);
+			$.ajax({
+				url: '{{ url_for("switch_press") }}',
+				type: 'POST',
+				data: { switch: chk },
+				success: function (response) {
+					console.log(response);
+				},
+				error: function (error) {
+					console.log(error);
+				}
+			});
+		});
+		$('#auto-flight-switch').click(function () {
+			var chk = $(this).is(":checked");
+			console.log(chk);
+			$.ajax({
+				url: '{{ url_for("auto_flight_press") }}',
+				type: 'POST',
+				data: { switch: chk },
+				success: function (response) {
+					console.log(response);
+				},
+				error: function (error) {
+					console.log(error);
+				}
+			});
+		});
+	});
+
+
+
+	function updateSensorData() {
+		$.ajax({
+			url: '/get_sensor_value/compass_heading',
+			type: 'GET',
+			dataType: 'json',
+			success: function (response) {
+				$('#compass_heading').text(response.compass_heading + '°');
+			},
+			error: function (error) {
+				console.log(error);
+			}
+		});
+
+		$.ajax({
+			url: '/get_sensor_value/gps_heading',
+			type: 'GET',
+			dataType: 'json',
+			success: function (response) {
+				$('#gps_heading').text(response.gps_heading + '°');
+			},
+			error: function (error) {
+				console.log(error);
+			}
+		});
+
+		$.ajax({
+			url: '/get_sensor_value/bot_speed',
+			type: 'GET',
+			dataType: 'json',
+			success: function (response) {
+				$('#bot_speed').text(response.bot_speed + 'km/h');
+			},
+			error: function (error) {
+				console.log(error);
+			}
+		});
+
+		$.ajax({
+			url: '/get_sensor_value/gps_speed',
+			type: 'GET',
+			dataType: 'json',
+			success: function (response) {
+				$('#gps_speed').text(response.gps_speed + 'km/h');
+			},
+			error: function (error) {
+				console.log(error);
+			}
+		});
+
+		$.ajax({
+			url: '/get_sensor_value/rudder_angle',
+			type: 'GET',
+			dataType: 'json',
+			success: function (response) {
+				$('#rudder_angle').text(response.rudder_angle + '°');
+			},
+			error: function (error) {
+				console.log(error);
+			}
+		});
+
+		$.ajax({
+			url: '/get_sensor_value/satellite',
+			type: 'GET',
+			dataType: 'json',
+			success: function (response) {
+				$('#satellite').text(response.satellite);
+			},
+			error: function (error) {
+				console.log(error);
+			}
+		});
+
+		$.ajax({
+			url: '/get_sensor_value/valid',
+			type: 'GET',
+			dataType: 'json',
+			success: function (response) {
+				$('#valid').text(response.valid);
+			},
+			error: function (error) {
+				console.log(error);
+			}
+		});
+
+
+
+
+
+
+	}
+
+	$(document).ready(function () {
+		setInterval(updateSensorData, 1000);
+	});
+
+
+
+
+
+</script>
+
+</html>
